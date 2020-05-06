@@ -20,7 +20,7 @@ namespace CalculatorSimple
 
         private void InitializeCalculator()
         {
-            this.BackColor = Color.Purple;
+            this.BackColor = Color.Gray;
 
             string buttonName = null;
             Button button = null;
@@ -28,6 +28,7 @@ namespace CalculatorSimple
             {
                 buttonName = "button" + i;
                 button = (Button)this.Controls[buttonName];
+                button.Text = i.ToString();
             }
 
 
