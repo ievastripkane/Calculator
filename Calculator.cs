@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,8 +13,10 @@ namespace CalculatorSimple
 {
     public partial class Calculator : Form
     {
+        char decimalSeparator;
         double numOne = 0;
         double numTwo = 0;
+        string operation;
 
         public Calculator()
         {
@@ -23,6 +26,7 @@ namespace CalculatorSimple
 
         private void InitializeCalculator()
         {
+            decimalSeparator = Convert.ToChar(Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
             this.BackColor = Color.Gray;
             Display.Text = "0";
             string buttonName = null;
@@ -97,17 +101,44 @@ namespace CalculatorSimple
 
         }
 
-        private void buttonAdd_Click(object sender, EventArgs e)
+        private void Operation_Click(object sender, EventArgs e)
         {
+            Button button = (Button)sender;
             numOne = Convert.ToDouble(Display.Text);
             Display.Text = string.Empty;
+            operation = button.Text;
+
         }
+
 
         private void buttonResult_Click(object sender, EventArgs e)
         {
+            double result = 0;
             numTwo = Convert.ToDouble(Display.Text);           
             Display.Text = (numOne + numTwo).ToString();
+
+            if (operation == "+")
+            {
+                result = numOne + numTwo;
+            }
+            else if (operation == "-")
+            {
+                result = numOne - numTwo;
+            }
+            else if (operation == "x")
+            {
+                result = numOne * numTwo;
+            }
+            else if (operation == "/")
+            {
+                result = numOne / numTwo;
+            }
+
+            Display.Text = result.ToString();
+       
         }
+
+
     }
 
 }
