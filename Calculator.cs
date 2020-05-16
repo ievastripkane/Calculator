@@ -17,6 +17,9 @@ namespace CalculatorSimple
         double numOne = 0;
         double numTwo = 0;
         string operation;
+        bool scifiMode = false;
+        const int widthSmall = 320;
+        const int widthLarge = 570;
 
         public Calculator()
         {
@@ -28,7 +31,12 @@ namespace CalculatorSimple
         {
             decimalSeparator = Convert.ToChar(Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
             this.BackColor = Color.Gray;
+            this.Width = widthSmall;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.StartPosition = FormStartPosition.CenterScreen;
             Display.Text = "0";
+            Display.TabStop = false;
             string buttonName = null;
             Button button = null;
             for (int i = 0; i < 10; i++)
@@ -57,26 +65,34 @@ namespace CalculatorSimple
 
         private void buttonDecimal_Click(object sender, EventArgs e)
         {
-            if (!Display.Text.Contains("."))
+
+            if (!Display.Text.Contains(decimalSeparator))
             {
                 if (Display.Text == string.Empty)
                 {
-                    Display.Text += "0.";
+                    Display.Text += "0" + decimalSeparator;
                 }
                 else
                 {
-                    Display.Text += ".";
+                    Display.Text += decimalSeparator;
                 }
-
             }
 
         }
         private void buttonBackspace_Click(object sender, EventArgs e)
         {
             string s = Display.Text;
+
             if (s.Length > 1)
             {
-                s = s.Substring(0, s.Length - 1);
+                if ((s.Contains("-")) && (s.Length == 2) || s.Substring(s.Length - 1, 1) == decimalSeparator.ToString())
+                {
+                    s = "0";
+                    Display.Text = s;
+                    return;
+                }
+                s = s.Substring(0, (s.Length - 1));
+
             }
             else
             {
@@ -105,6 +121,13 @@ namespace CalculatorSimple
         {
             Button button = (Button)sender;
             numOne = Convert.ToDouble(Display.Text);
+
+            if(button.Text == "Sqrt")
+            {
+                Display.Text = Math.Sqrt(numOne).ToString();
+                return;
+            }
+
             Display.Text = string.Empty;
             operation = button.Text;
 
@@ -120,6 +143,7 @@ namespace CalculatorSimple
             if (operation == "+")
             {
                 result = numOne + numTwo;
+                result = numOne + numTwo;
             }
             else if (operation == "-")
             {
@@ -133,12 +157,37 @@ namespace CalculatorSimple
             {
                 result = numOne / numTwo;
             }
+            else if (operation == "^")
+            {
+                result = Math.Pow(numOne, numTwo);
+            }
 
             Display.Text = result.ToString();
        
         }
 
+        private void buttonSciFi_Click(object sender, EventArgs e)
+        {
+            if(scifiMode)
+            {
+                this.Width = widthSmall;
+            }
+            else
+            {
+                this.Width = widthLarge;
+            }
+            scifiMode = !scifiMode;
+        }
 
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            Display.Text = "0";
+            numOne = 0;
+            numTwo = 0;
+            numTwo = 0;
+            numTwo = 0;
+            numTwo = 0;
+        }
     }
 
 }
